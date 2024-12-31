@@ -1,13 +1,13 @@
 <?php 
+include_once "../config/DataBase.php";
 
-class User{
+class User extends DataBase{
 
     private string $firstname;
     private string $lastname;
     private string $email;
     private string $password;
     private string $role;
-    private $pdo;
 
     public function __construct($pdo){
         $this -> pdo = $pdo;
@@ -53,9 +53,16 @@ class User{
       $this -> email = $role;
     }
 
-    protected function login($firstname,$lastname,$email,$role,$password){
+    protected function login(){
+        $sql = $this->connect()->prepare("INSERT INTO users(firstname,lastname,email,password,role)
+        VALUES(:firstname, :lastname, :email, :role, :password)");
+        $sql->bindParam(":firstname",$this->firstname);
+        $sql->bindParam(":lastname",$this->lastname);
+        $sql->bindParam(":email",$this->email);
+        $sql->bindParam(":password",$this->password);
+        $sql->bindParam(":role",$this->role);
 
-        
+        $sql -> execute();
      
     }
 }

@@ -53,7 +53,9 @@ class User{
       $this -> email = $role;
     }
 
-    protected function login(){
+    protected function login($firstname,$lastname,$email,$role,$password){
 
+        
+     
     }
 }

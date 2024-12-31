@@ -1,7 +1,7 @@
 <?php 
 include_once "../config/DataBase.php";
 
-class User extends DataBase{
+class Visitor extends DataBase{
 
     private string $firstname;
     private string $lastname;
@@ -49,11 +49,16 @@ class User extends DataBase{
       $this -> email = $role;
     }
 
-    protected function login($email,$password){
-        $sql = $this->connect()->prepare("SELECT user_id,email,role FROM users 
-        WHERE email = ? AND password = ?");
+    protected function login(){
+        $sql = $this->connect()->prepare("INSERT INTO users(firstname,lastname,email,password,role)
+        VALUES(:firstname, :lastname, :email, :role, :password)");
+        $sql->bindParam(":firstname",$this->firstname);
+        $sql->bindParam(":lastname",$this->lastname);
+        $sql->bindParam(":email",$this->email);
+        $sql->bindParam(":password",$this->password);
+        $sql->bindParam(":role",$this->role);
 
-        $sql -> execute([$email,$password]);
+        $sql -> execute();
      
     }
 }

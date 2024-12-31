@@ -33,3 +33,4 @@ foreign key (categorie_id) references categoriescategoriescategories(categorie_i
 );
 
 
+

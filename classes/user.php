@@ -3,57 +3,49 @@ include_once "../config/DataBase.php";
 
 class User extends DataBase{
 
-    private string $firstname;
-    private string $lastname;
-    private string $email;
-    private string $password;
-    private string $role;
+    protected function getUser($email,$password){
+        $sql = $this->connect()->prepare("SELECT password FROM users 
+        WHERE email = ?");
 
-    //firstname getter and setter
-    public function getFirstName(){
-        return $this -> firstname;
-    }
-    public function setFirstName($firstname){
-      $this -> firstname = $firstname;
-    }
+        if(!$sql -> execute([$email])){
+            $sql = null;
+            exit();
+        }
 
-    //lastname getter and setter
-    public function getLastName(){
-        return $this -> lastname;
-    }
-    public function setLastName($lastname){
-      $this -> firstname = $lastname;
-    }
+        if($sql->rowCount() == 0){
+          $sql = null;
+          header("Location: ../public/login.php?error=usernotfound");
+          exit();
+        }
+        
+        $hachedPass = $sql->fetchAll();
+        $checkPass = password_verify($password,$hachedPass[0]["password"]);
 
-    //email getter and setter
-    public function getEmail(){
-        return $this -> email;
-    }
-    public function setEmail($email){
-      $this -> email = $email;
-    }
+        if($checkPass === false){
+            $sql = null;
+            header('Location: ../public/login.php?error=passwordincorect');
+            exit();
+        }
 
-    //password getter and setter
-    public function getPassword(){
-        return $this -> password;
-    }
-    public function setPassword($password){
-      $this -> email = $password;
-    }
+        else if($checkPass === true){
+            $stmt = $this->connect()->prepare("SELECT * FROM users 
+            WHERE email = ? AND password = ?");
 
-    //role getter and setter
-    public function getRole(){
-        return $this -> role;
-    }
-    public function setRole($role){
-      $this -> email = $role;
-    }
+            if(!$stmt->execute([$email,$hachedPass[0]["password"]])){
+                $sql = null;
+                header("Location: ../public/login.php?error=stmfailed");
+                exit();
+            }
 
-    protected function login($email,$password){
-        $sql = $this->connect()->prepare("SELECT user_id,email,role FROM users 
-        WHERE email = ? AND password = ?");
+            $user = $stmt->fetchAll();
 
-        $sql -> execute([$email,$password]);
+            session_start();
+
+            $_SESSION["username"] = $user[0]["firstname"];
+            $_SESSION["userId"] = $user[0]["user_id"];
+
+        }
+        
      
     }
 }

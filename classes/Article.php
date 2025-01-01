@@ -9,8 +9,8 @@ class Article{
 
     public function __construct($title,$content,$image,$author,$categorie){
 
-        $this->title = $title;
-        $this->content = $content;
+        $this->title = htmlspecialchars($title);
+        $this->content = htmlspecialchars($content);
         $this->image = $image;
         $this->author = $author;
         $this->categorie->$categorie;

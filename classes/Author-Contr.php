@@ -1,5 +1,6 @@
 <?php
 include_once "Article.php";
+
 class AuthorContr extends Author{
 
     public function setArticle(Article $article){

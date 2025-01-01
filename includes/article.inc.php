@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 
         $author_id = $_SESSION["user_id"];
         
-        $article = new Article($title,$content,$image,$author_id,$categorie);
+        $article = new Article($title,$content,$newFileName,$author_id,$categorie);
         $authAr = new AuthorContr();
         $authAr->setArticle($article);
 

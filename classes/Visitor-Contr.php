@@ -10,14 +10,6 @@ class VisitorContr extends Visitor{
     private string $passConfirm;
     private string $role;
 
-    // public function __construct($firstname,$lastname,$email,$password,$role){
-    //    $this->firstname = $firstname;
-    //    $this->lastname = $lastname;
-    //    $this->email = $email;
-    //    $this->password = $password;
-    //    $this->role = $role;
-    // }
-
     //firstname getter and setter
     public function getFirstName(){
         return $this -> firstname;

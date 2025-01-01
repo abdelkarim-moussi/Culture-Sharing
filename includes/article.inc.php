@@ -38,3 +38,4 @@ if(isset($_GET["delete"])){
     $author->deleteArticle($article_id);
     header("Location: ../authorDash.php");
 }
+

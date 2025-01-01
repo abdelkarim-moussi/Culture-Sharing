@@ -3,7 +3,7 @@ session_start();
 include_once "Articles.php";
 class Author extends Visitor{
 
-    protected function CreateArticle($title,$categorie,$content,$image){
+    protected function createArticle($title,$categorie,$content,$image){
 
         $author_id = $_SESSION["userId"];
         $cat = $this->connect()->prepare("SELECT categorie_id categories WHERE categorie_name = $categorie");
@@ -21,6 +21,23 @@ class Author extends Visitor{
             exit();
         }
 
+    }
+
+    public function deleteArticle($article_id){
+        
+        $author_id = $_SESSION["userId"];
+
+        $stmt = $this->connect()->query("DELETE FROM articles WHERE article_id = $article_id AND user_id = $author_id");
+        
+        if(!$stmt->execute()){
+            header("Location:../public/authorDash.php?error=executionfailed");
+        }
+
+    }
+
+    public function updateArticle(Article $article){
+
+    
 
     }
 }

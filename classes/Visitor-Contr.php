@@ -58,7 +58,7 @@ class VisitorContr extends Visitor{
     }
 
     
-    protected function signUp($email,$firstname,$lastname,$password,$passConfirm){
+    protected function signUp($email,$firstname,$lastname,$role,$password,$passConfirm){
 
         $emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
         $nameRegex = "^[a-zA-Z0-9]+$";
@@ -82,7 +82,7 @@ class VisitorContr extends Visitor{
         }
         
         $Visitor = new Visitor();
-        $Visitor->$this->createUser($firstname,$lastname,$email,$password,$role);
+        $Visitor->$this->createUser($firstname,$lastname,$email,$role,$password);
     
     }
 

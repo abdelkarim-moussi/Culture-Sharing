@@ -1,5 +1,5 @@
 <?php
-include_once "classes/User.php";
+include_once "classes/User-Contr.php";
 if($_SERVER['REQUEST_METHOD'] === "POST"){
     
     $email = $_POST["email"];

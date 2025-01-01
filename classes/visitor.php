@@ -3,7 +3,7 @@
 class Visitor extends User{
 
     
-    protected function createUser($firstname,$lastname,$email,$password,$role){
+    protected function createUser($firstname,$lastname,$email,$role,$password){
 
         $sql = $this->connect()->prepare("SELECT * FROM users WHERE email = ?;");
 
@@ -30,7 +30,7 @@ class Visitor extends User{
            
            $hachedPass = password_hash($password,PASSWORD_BCRYPT);
            
-           $sql -> execute([$firstname,$lastname,$email,$role,$hachedPass]); 
+           $sql -> execute([$firstname,$lastname,$email,$hachedPass,$role]); 
         }
       
     }

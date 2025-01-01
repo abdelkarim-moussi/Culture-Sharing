@@ -30,12 +30,15 @@ class Author extends Visitor{
         $stmt = $this->connect()->query("DELETE FROM articles WHERE article_id = $article_id AND user_id = $author_id");
         
         if(!$stmt->execute()){
+            $stmt = null;
             header("Location:../public/authorDash.php?error=executionfailed");
+            exit();
         }
 
     }
 
     public function updateArticle($title,$categorie,$content,$image){
+
         $author_id = $_SESSION["userId"];
         $catstmt =$this->connect()->prepare("SELECT cetegorie_id FROM categories WHERE categorie_name = ?");
         $catstmt->execute($categorie);
@@ -44,7 +47,7 @@ class Author extends Visitor{
 
         $stmt = $this->connect()->prepare("UPDATE TABLE articles SET categorie_id = ?, title = ?, content = ?, image = ? WHERE user_id = ?");
         
-        if(!$stmt ->execute([$categorie_id,$title,$content,$author_id])){
+        if(!$stmt ->execute([$categorie_id,$title,$content,$image,$author_id])){
             $stmt = null;
             header("Location: ../public/authorDash.php?error=failedUpdatingarticle");
             exit();

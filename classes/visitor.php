@@ -1,8 +1,9 @@
 <?php
 
-class Visitor extends DataBase{
+class Visitor extends User{
 
-        protected function createUser($firstname,$lastname,$email,$password,$role){
+    
+    protected function createUser($firstname,$lastname,$email,$password,$role){
 
         $sql = $this->connect()->prepare("SELECT * FROM users WHERE email = ?;");
 

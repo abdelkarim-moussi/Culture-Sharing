@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 class Visitor extends DataBase{
 
         protected function createUser($firstname,$lastname,$email,$password,$role){
@@ -21,14 +22,15 @@ class Visitor extends DataBase{
             }
         }
 
+        elseif($sql->rowCount() == 0){
 
-
-
-
-        // $sql = $this->connect()->prepare("INSERT INTO users(firstname,lastname,email,password,role)
-        // VALUES(?, ?, ?, ?, ?);");
-        
-        // $sql -> execute([$firstname,$lastname,$email,$role,$password]);
-     
+           $sql = $this->connect()->prepare("INSERT INTO users(firstname,lastname,email,password,role)
+           VALUES(?, ?, ?, ?, ?);");
+           
+           $hachedPass = password_hash($password,PASSWORD_BCRYPT);
+           
+           $sql -> execute([$firstname,$lastname,$email,$role,$hachedPass]); 
+        }
+      
     }
 }

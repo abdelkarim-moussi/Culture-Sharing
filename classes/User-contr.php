@@ -29,8 +29,7 @@ class UserContr extends User{
             exit();
         }
         
-        $user = new User();
-        $user->getUser($email,$password);
+        $this->getUser($email,$password);
     
     }
 

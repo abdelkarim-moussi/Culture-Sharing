@@ -2,6 +2,7 @@
 session_start();
 include_once "../classes/Author-Contr.php";
 include_once "../classes/Article.php";
+include_once "../classes/Author.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
 
@@ -23,7 +24,17 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
         $authAr = new AuthorContr();
         $authAr->setArticle($article);
 
+        header("Location: ../authorDash.php");
+
     }
    
 
+}
+
+
+if(isset($_GET["delete"])){
+    $article_id = $_GET["aid"];
+    $author = new Author();
+    $author->deleteArticle($article_id);
+    header("Location: ../authorDash.php");
 }

@@ -4,7 +4,7 @@ const icon = document.querySelector(".fa-solid")
 const toggledItems = document.querySelectorAll(".toggeled-item");
 const sections = document.querySelectorAll("section");
 const globalSections = document.querySelector("body")
-
+const addnewCatBtn = document.getElementById("addnewcat");
 
 
 
@@ -52,3 +52,9 @@ function sectionSwitch(){
 
 }
 sectionSwitch();
+
+
+addnewCatBtn.addEventListener("click",()=>{
+   document.getElementById("categories").classList.remove("active");
+   document.getElementById("addCategorie").classList.add("active");
+})

@@ -18,7 +18,8 @@ class AuthorContr extends Author{
           exit();
         }
     
-        $this->CreateArticle($article->getTitle(),$article->getContent(),$article->getImage(),$article->getCategorie());
+        $this->createArticle($article->getTitle(),$article->getContent(),$article->getImage(),$article->getCategorie());
     }
+
 
 }

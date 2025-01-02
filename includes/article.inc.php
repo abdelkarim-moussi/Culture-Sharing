@@ -64,6 +64,5 @@ if(isset($_POST["update"])){
 
         header("Location: ../authorDash.php?articleudpdatedsucces");
     }
-
    
 }

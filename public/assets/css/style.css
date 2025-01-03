@@ -53,6 +53,9 @@ th,td{
 .sec5{
     display: none;
 }
+.sec6{
+    display: none;
+}
 
 /* .notActive{
     left: -250px;
@@ -60,3 +63,4 @@ th,td{
 .active{
     display: block;
 }
+

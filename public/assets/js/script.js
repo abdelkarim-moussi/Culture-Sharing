@@ -18,7 +18,6 @@ const addnewCatBtn = document.getElementById("addnewcat");
 // menuButton.addEventListener("click",toggleNavbar);
 
 
-
 function sectionSwitch(){
     for(let i = 0; i < toggledItems.length; i++){
         toggledItems[i].addEventListener("click", function (){

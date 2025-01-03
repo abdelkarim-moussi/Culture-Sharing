@@ -25,7 +25,7 @@
                     <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="authors" href="#">Authors</a></li>
                     <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="visitors" href="#">Visitors</a></li>
                     <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list"></i><a data-id ="articles" href="#">Articles</a></li>
-                    
+                    <li class="toggeled-item absolute bottom-5 text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.php">logout</a></li>
                 </ul>
             </div>
             
@@ -170,7 +170,7 @@
                 <div class="bg-blue-100 w-[50px] h-[50px] rounded-lg"></div>
                 <h3 class="text-[2rem]">10</h3>
             </div>
-            <h3>disponible articles</h3>
+            <h3>all articles</h3>
         </div>
 
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
@@ -194,10 +194,10 @@
                 <div class="bg-red-100 w-[50px] h-[50px] rounded-lg"></div>
                 <h3 class="text-[2rem]">3</h3>
             </div>
-            <h3>refused articles</h3>
+            <h3>my articles</h3>
         </div>
     </div>
-    <h1 class="text-lg mb-5 border-b pb-5 capitalize">Disponible visitors</h1>
+    <h1 class="text-lg mb-5 border-b pb-5 capitalize">My disponible articles</h1>
 
     <table class="w-full rounded-lg">
          <thead>
@@ -233,6 +233,11 @@
          </tbody>
       </table>
     
+    </section>
+
+    <!-- author profile -->
+    <section>
+       
     </section>
     
 

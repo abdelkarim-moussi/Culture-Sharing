@@ -17,7 +17,7 @@
 
 <main class="w-full max-w-[900px] mx-auto bg-white p-5 rounded-lg shadow-md mt-[80px]">
     <div>
-        <img class="rounded-lg shadow-md h-[400px] w-full object-cover" src="assets/imgs/img1.jpg" alt="article image">
+        <img class="rounded-t-lg shadow-md h-[400px] w-full object-cover" src="assets/imgs/img1.jpg" alt="article image">
     </div>
 
     <section>

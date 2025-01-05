@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once "../classes/Admin.php";
 if(isset($_SESSION['userId'])){
 
     if($_SESSION['urole'] === "author"){
@@ -63,16 +64,18 @@ if(isset($_SESSION['userId'])){
             </tr>
          </thead>
          <tbody>
-         
+         <?php 
+         $adm = new Admin();
+         foreach($adm->showCategories() as $cat){ ?>
             <tr>
               <td class="font-normal">
-                 1
+              <?php echo $cat["categorie_id"]; ?>
               </td>
               <td class="font-normal">
-                  categorie 1
+                  <?php echo $cat["categorie_name"]; ?>
               </td>
               <td class="font-normal">
-                   20
+              <?php foreach($adm->showArtNumByCat() as $numar){echo $numar["num"];} ?>
               </td>
               <td class="font-normal flex justify-center gap-3">
                 <a href="" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">update</a>
@@ -80,6 +83,7 @@ if(isset($_SESSION['userId'])){
               </td>
 
             </tr>
+            <?php } ?>
          
          </tbody>
       </table>

@@ -18,8 +18,24 @@ class Admin{
     }
 
     public function showCategories(){
-        
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $selectCat = $conn->query("SELECT * FROM categories");
+        return $result = $selectCat->fetchAll();
+
     }
+
+    public function showArtNumByCat(){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $selectNumAr = $conn->query("SELECT count(*) num FROM articles INNER JOIN categories WHERE articles.categorie_id = categories.categorie_id");
+        return $result = $selectNumAr->fetchAll();
+
+    }
+
+
 
    
 }

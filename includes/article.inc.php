@@ -18,7 +18,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 
     $author_id = $_SESSION["userId"];
 
+
     if(isset($title) && isset($content) &&  isset($categorie) && isset($newFileName)){
+
+        echo $title ."<br>".$content."<br>".$newFileName."<br>".$categorie;
         
         $article = new Article($title,$content,$newFileName,$author_id,$categorie);
         $authAr = new AuthorContr();
@@ -32,11 +35,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 }
 
 
-if(isset($_GET["delete"])){
-    $article_id = $_GET["aid"];
+if(isset($_GET["idart"])){
+    $article_id = $_GET["idart"];
     $author = new Author();
     $author->deleteArticle($article_id);
-    header("Location: ../authorDash.php");
 }
 
 
@@ -65,4 +67,16 @@ if(isset($_POST["update"])){
         header("Location: ../authorDash.php?articleudpdatedsucces");
     }
    
+}
+
+if(isset($_GET["acidart"])){
+    $article_id = $_GET["acidart"];
+    $author = new Author();
+    $author->updateStatus("accepted",$article_id);
+}
+
+if(isset($_GET["refidart"])){
+    $article_id = $_GET["refidart"];
+    $author = new Author();
+    $author->updateStatus("refused",$article_id);
 }

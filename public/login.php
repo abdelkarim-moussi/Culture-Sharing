@@ -1,11 +1,15 @@
 <?php
 session_start();
+
 if(isset($_SESSION['userId'])){
     if($_SESSION['urole'] === "author"){
         header("Location: authorDash.php");
     }
     else if($_SESSION['urole'] === "visitor"){
         header("Location: index.php");
+    }
+    else if($_SESSION['urole'] === "admin"){
+        header("Location: adminDash.php");
     }
 }
 ?>

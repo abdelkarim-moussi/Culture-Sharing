@@ -11,12 +11,5 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
         $user = new UserContr();
         $user->login($email,$password);
         header("Location: ../public/index.php");
-
-        // if($_SESSION["useRole"] === "author"){
-        //     header("Location: ../public/authorDash.php");
-        // }
-        // elseif($_SESSION["useRole"] === "visitor"){
-        //     header("Location: ../public/index.php");
-        // } 
     }
 }

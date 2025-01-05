@@ -2,6 +2,7 @@
 session_start();
 
 include_once "../classes/Author.php";
+include_once "../classes/Admin.php";
 
 if(isset($_SESSION['userId'])){
     if($_SESSION['urole'] === "admin"){
@@ -11,7 +12,9 @@ if(isset($_SESSION['userId'])){
         header("Location: index.php");
 
     }
+    
 }
+else header("Location: login.php");
 
 ?>
 <!DOCTYPE html>
@@ -56,7 +59,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-blue-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]"><?php  ?></h3>
+                <?php
+                $author = new Author();
+                foreach($author->countNumARt() as $numARt){ ?>
+                <h3 class="text-[2rem]"><?php echo $numARt["numArt"];?></h3>
+                <?php } ?>
             </div>
             <h3>My articles</h3>
         </div>
@@ -64,7 +71,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-green-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">5</h3>
+                <?php
+                $author = new Author();
+                foreach($author->showNumArtByStat("accepted") as $artNum){ ?>
+                <h3 class="text-[2rem]"><?php echo $artNum["numart"];?></h3>
+                <?php } ?>
             </div>
             <h3>accepted articles</h3>
         </div>
@@ -72,7 +83,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-orange-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">1</h3>
+                <?php
+                $author = new Author();
+                foreach($author->showNumArtByStat("pending") as $artNum){ ?>
+                <h3 class="text-[2rem]"><?php echo $artNum["numart"];?></h3>
+                <?php } ?>
             </div>
             <h3>pending articles</h3>
         </div>
@@ -80,7 +95,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-red-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">3</h3>
+                <?php
+                $author = new Author();
+                 foreach($author->showNumArtByStat("refused") as $artNum){ ?>
+                <h3 class="text-[2rem]"><?php echo $artNum["numart"];?></h3>
+                <?php } ?>
             </div>
             <h3>refused articles</h3>
         </div>
@@ -121,7 +140,7 @@ if(isset($_SESSION['userId'])){
               </td>
               <td class="font-normal flex justify-center gap-3">
                 <a href="" class="bg-yellow-100 hover:bg-yellow-200 rounded-md py-1 px-3">edit</a>
-                <a href="" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
+                <a href="../includes/article.inc.php?idart=<?php echo $article['article_id']; ?>" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
               </td>
             </tr>
          <?php }?>
@@ -152,7 +171,13 @@ if(isset($_SESSION['userId'])){
                 <div>
                       <label for="categorie" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categorie</label>
                       <select name="categorie" id="categorie" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="musique">musique</option>
+                      <?php 
+                      $adm = new Admin();
+                      foreach($adm->showCategories() as $cat){
+                      ?>  
+                      <option value="<?php echo $cat["categorie_name"];?>"><?php echo $cat["categorie_name"] ;?></option>
+                      <?php } ?>
+
                       </select>
                   </div>
                 

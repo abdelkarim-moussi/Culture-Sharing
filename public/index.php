@@ -3,9 +3,11 @@ session_start();
 if($_SESSION["urole"] === "author"){
     header("Location:authorDash.php");
 }
-elseif($_SESSION["urole"] === "visitor"){
-    header("Location:index.php");
-} 
+elseif($_SESSION["urole"] === "admin"){
+    header("Location:adminDash.php");
+}
+else  header("Location:index.php");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

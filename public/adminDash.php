@@ -9,8 +9,8 @@ if(isset($_SESSION['userId'])){
     elseif($_SESSION['urole'] === "visitor"){
         header("Location: index.php");
     }
-
 }
+else header("Location: login.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +79,7 @@ if(isset($_SESSION['userId'])){
               </td>
               <td class="font-normal flex justify-center gap-3">
                 <a href="" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">update</a>
-                <a href="" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
+                <a href="../includes/categorie.inc.php?idcat=<?php echo $cat['categorie_id']; ?>" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
               </td>
 
             </tr>
@@ -125,21 +125,27 @@ if(isset($_SESSION['userId'])){
          </thead>
          <tbody>
          
-            <tr>
-              <td class="font-normal">
-                 1
-              </td>
-              <td class="font-normal">
-                  author name
-              </td>
-              <td class="font-normal">
-                  author email
-              </td>
-              <td class="font-normal">
-                  4
-              </td>
-            
-            </tr>
+         <?php 
+        
+        foreach($adm->showUsers("author") as $user){ ?>
+           <tr>
+             <td class="font-normal">
+                <?php echo $user["user_id"]; ?>
+             </td>
+             <td class="font-normal">
+             <?php echo $user["firstname"] ." ".$user["lastname"]; ?>
+             </td>
+             <td class="font-normal">
+             <?php echo $user["email"]; ?>
+             </td>
+             <?php foreach($adm->calcArticles() as $artNum){ ?>
+             <td class="font-normal">
+                <?php echo $artNum["numar"] ?>
+             </td>
+             <?php } ?>
+
+           </tr>
+        <?php } ?>
          
          </tbody>
       </table>
@@ -159,20 +165,22 @@ if(isset($_SESSION['userId'])){
             </tr>
          </thead>
          <tbody>
-         
+         <?php 
+        
+         foreach($adm->showUsers("visitor") as $user){ ?>
             <tr>
               <td class="font-normal">
-                 1
+                 <?php echo $user["user_id"]; ?>
               </td>
               <td class="font-normal">
-                  visitor name
+              <?php echo $user["firstname"] ." ".$user["lastname"]; ?>
               </td>
               <td class="font-normal">
-                  visitor email
+              <?php echo $user["email"]; ?>
               </td>
 
             </tr>
-         
+         <?php } ?>
          </tbody>
       </table>
     
@@ -185,7 +193,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-blue-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">10</h3>
+                <?php 
+                 $adm = new Admin();
+                 foreach($adm->disArticles() as $art){?>
+                <h3 class="text-[2rem]"><?php echo $art["num"];?></h3>
+                <?php } ?>
             </div>
             <h3>all articles</h3>
         </div>
@@ -193,7 +205,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-green-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">5</h3>
+                <?php 
+                 $adm = new Admin();
+                 foreach($adm->showNumArtStatus("accepted") as $art){?>
+                <h3 class="text-[2rem]"><?php echo $art["num"];?></h3>
+                <?php } ?>
             </div>
             <h3>accepted articles</h3>
         </div>
@@ -201,7 +217,11 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-orange-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">1</h3>
+                <?php 
+                 $adm = new Admin();
+                 foreach($adm->showNumArtStatus("pending") as $art){?>
+                <h3 class="text-[2rem]"><?php echo $art["num"];?></h3>
+                <?php } ?>
             </div>
             <h3>pending articles</h3>
         </div>
@@ -209,9 +229,13 @@ if(isset($_SESSION['userId'])){
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-red-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">3</h3>
+                <?php 
+                 $adm = new Admin();
+                 foreach($adm->showNumArtStatus("refused") as $art){?>
+                <h3 class="text-[2rem]"><?php echo $art["num"];?></h3>
+                <?php } ?>
             </div>
-            <h3>my articles</h3>
+            <h3>refused articles</h3>
         </div>
     </div>
     <h1 class="text-lg mb-5 border-b pb-5 capitalize">disponible articles</h1>
@@ -227,34 +251,31 @@ if(isset($_SESSION['userId'])){
             </tr>
          </thead>
          <tbody>
-         
+         <?php
+         $adm = new Admin();
+          foreach($adm->showArticles() as $article){ ?>
             <tr>
               <td class="font-normal">
-                 1
+                 <?php echo $article["article_id"];?>
               </td>
               <td class="font-normal">
-                  article title
+              <?php echo $article["title"];?>
               </td>
               <td class="font-normal">
-                  author name
+              <?php echo $article["firstname"];?>
               </td>
               <td class="font-normal">
-                  <p class="bg-blue-50 rounded-md">status</p>
+                  <p class="bg-blue-50 rounded-md"><?php echo $article["status"];?></p>
               </td>
               <td class="font-normal flex justify-center gap-3">
-                <a href="" class="bg-green-100 hover:bg-green-200 rounded-md py-1 px-3">accept</a>
-                <a href="" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">refuse</i></a>
+                <a href="../includes/article.inc.php?acidart=<?php echo $article['article_id']; ?>" class="bg-green-100 hover:bg-green-200 rounded-md py-1 px-3">accept</a>
+                <a href="../includes/article.inc.php?refidart=<?php echo $article['article_id']; ?>" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">refuse</i></a>
               </td>
             </tr>
-         
+         <?php } ?>
          </tbody>
       </table>
     
-    </section>
-
-    <!-- author profile -->
-    <section>
-       
     </section>
     
 

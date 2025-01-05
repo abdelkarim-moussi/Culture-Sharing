@@ -34,6 +34,70 @@ class Admin{
         return $result = $selectNumAr->fetchAll();
 
     }
+   
+    public function deleteCategorie($idcategorie){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+        $deletQuery = $conn->prepare("DELETE FROM categories WHERE categorie_id = :idcategorie");
+        $deletQuery->bindParam(":idcategorie",$idcategorie);
+        $deletQuery->execute();
+        header("Location: ../public/adminDash.php");
+    }
+
+    public function showArticles(){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $selectAr = $conn->query("SELECT * FROM articles INNER JOIN users WHERE articles.user_id = users.user_id");
+        $selectAr->execute();
+        return $result = $selectAr->fetchAll();
+
+    }
+
+    public function disArticles(){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $numArt = $conn->prepare("SELECT count(*) AS num FROM articles");
+        $numArt->execute();
+        $result = $numArt->fetchAll();
+        return $result;
+
+    }
+
+    public function showNumArtStatus($status){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $numArt = $conn->prepare("SELECT count(*) AS num FROM articles WHERE status = ?");
+        $numArt->execute([$status]);
+        $result = $numArt->fetchAll();
+        return $result;
+
+    }
+
+    public function showUsers($role){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $visitors = $conn->prepare("SELECT * FROM users WHERE role = ?");
+        $visitors->execute([$role]);
+        $result = $visitors->fetchAll();
+        return $result;
+
+    }
+
+    public function calcArticles(){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $visitors = $conn->prepare("SELECT COUNT(*) AS numar FROM articles INNER JOIN users WHERE articles.user_id = users.user_id");
+        $visitors->execute();
+        $result = $visitors->fetchAll();
+        return $result;
+
+    }
+
 
 
 

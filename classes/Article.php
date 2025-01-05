@@ -1,6 +1,7 @@
 <?php
 
 class Article{
+    
     private $title;
     private $content;
     private $image;
@@ -13,7 +14,7 @@ class Article{
         $this->content = htmlspecialchars($content);
         $this->image = $image;
         $this->author = $author;
-        $this->categorie->$categorie;
+        $this->categorie = htmlspecialchars($categorie);
 
     }
 

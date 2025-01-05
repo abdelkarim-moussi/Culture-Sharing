@@ -22,3 +22,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
    
 
 }
+
+if(isset($_GET["idcat"])){
+
+    $catId = $_GET["idcat"];
+    $adm = new Admin();
+    $adm->deleteCategorie($catId);
+}

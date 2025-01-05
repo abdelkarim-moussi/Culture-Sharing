@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+include_once "../classes/Author.php";
+
+if(isset($_SESSION['userId'])){
+    if($_SESSION['urole'] === "admin"){
+        header("Location: adminDash.php");
+    }
+    elseif($_SESSION['urole'] === "visitor"){
+        header("Location: index.php");
+
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,15 +30,16 @@
 <!-- <button id="menu-button" type="button" class="text-[#111C2D] z-20 px-1 rounded absolute top-5 left-6 hover:text-orange-500"><i class="fa-solid fa-bars text-xl"></i></button> -->
 <section id="nav-bar" class="px-3 text-[#111C2D] h-[95vh] w-[250px] bg-white notActive rounded-lg shadow-md">
             <div class="flex items-center justify-center py-2 border-b-[1px] border-gray-300">
-                <h4 class="text-orange-500 font-extrabold text-[1.2rem] mt-5">Culture<span class="text-[#111C2D]">/Sharing</span>
-                </h4>
+                <h4 class="text-orange-500 font-extrabold text-[1.2rem] mt-5">Culture<span class="text-[#111C2D]">/Sharing</span></h4>
             </div>
             
             <div class="py-5 dach ">
                 <ul class="pl-2 flex flex-col gap-y-6">
+
                     <li class="toggeled-item text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center active-btn" ><i class="fa-solid fa-list"></i><a data-id ="articles" href="#">Articles</a></li>
+                    <li class="toggeled-item text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list"></i><a data-id ="addArticle" href="#">Add Articles</a></li>
                     <li class="toggeled-item text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-user"></i><a data-id ="profile" href="#">Profile</a></li>
-                    <li class="toggeled-item absolute bottom-5 text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.php">logout</a></li>
+                    <li class="toggeled-item absolute bottom-5 text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.inc.php">logout</a></li>
                     
                 </ul>
             </div>
@@ -39,7 +56,7 @@
         <div class="flex flex-col rounded-lg shadow-md px-5 py-6 gap-3">
             <div class="flex gap-3 items-center">
                 <div class="bg-blue-100 w-[50px] h-[50px] rounded-lg"></div>
-                <h3 class="text-[2rem]">10</h3>
+                <h3 class="text-[2rem]"><?php  ?></h3>
             </div>
             <h3>My articles</h3>
         </div>
@@ -69,8 +86,10 @@
         </div>
     </div>
 
-    <h1 class="text-lg mb-5 border-b pb-5 capitalize">Disponible articles</h1>
-
+    <div class="flex items-enter justify-between mb-5 border-b pb-5">
+    <h1 class="text-lg capitalize">Disponible articles</h1>
+    <button id="addnewart" class="bg-orange-200 px-5 py-2 rounded-md capitalize hover:bg-orange-300">add new article</button>
+    </div>
     <table class="w-full rounded-lg">
          <thead>
             <tr class="text-[#686a6d] capitalize">
@@ -82,31 +101,67 @@
             </tr>
          </thead>
          <tbody>
-         
+         <?php 
+         $author = new Author();
+         $result = $author->showArticles();
+         foreach($result as $article){
+         ?>
             <tr>
               <td class="font-normal">
-                 1
+                 <?php echo $article["article_id"] ?>
               </td>
               <td class="font-normal">
-                  article title
+              <?php echo $article["title"] ?>
               </td>
               <td class="font-normal">
-                  author name
+              <?php echo $article["firstname"]." ".$article["lastname"] ?>
               </td>
               <td class="font-normal">
-                  <p class="bg-blue-50 rounded-md">status</p>
+                  <p class="bg-blue-50 rounded-md"><?php echo $article["status"] ?></p>
               </td>
               <td class="font-normal flex justify-center gap-3">
-                <a href="" class="bg-green-100 hover:bg-green-200 rounded-md py-1 px-3">accept</a>
-                <a href="" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">refuse</i></a>
+                <a href="" class="bg-yellow-100 hover:bg-yellow-200 rounded-md py-1 px-3">edit</a>
+                <a href="" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
               </td>
             </tr>
-         
+         <?php }?>
          </tbody>
       </table>
     
     </section>
     
+<!-- Add Article section -->
+<section class="w-full section text-[#111C2D] bg-white rounded-lg shadow-md sec7" id="addArticle">
+    <h1 class="text-lg mb-5 border-b pb-5 capitalize">Add new article</h1>
+    <form class="space-y-4 md:space-y-6" action="../includes/article.inc.php" method="POST" id="signup-form" enctype="multipart/form-data">
+                 <div>
+                      <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+                      <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="article name">
+                  </div>
+                 <div>
+                    <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
+                    <textarea name="content" id="content"  class="h-[200px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="article content..."></textarea>
+                    <div class="error text-sm text-red-600"></div>
+                </div>
+                 <div>
+                    <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">image</label>
+                    <input type="file" name="image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <div class="error text-sm text-red-600"></div>
+                </div>
+            
+                <div>
+                      <label for="categorie" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categorie</label>
+                      <select name="categorie" id="categorie" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="musique">musique</option>
+                      </select>
+                  </div>
+                
+                  <button type="submit" name="add-art" id="add-art" class="w-full uppercase tracking-wide text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add Article</button>
+        
+            </form>
+    </section>
+
+<!-- pesonal info -->
 <section class="w-full section text-[#111C2D] bg-white rounded-lg shadow-md sec6 profile" id="profile">
 
 <h1 class="text-lg mb-5 border-b pb-5 capitalize">My personal informations </h1>

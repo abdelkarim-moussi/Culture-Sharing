@@ -1,4 +1,5 @@
 <?php
+include_once "visitor.php";
 
 class VisitorContr extends Visitor{
 
@@ -58,31 +59,33 @@ class VisitorContr extends Visitor{
     }
 
     
-    protected function signUp($email,$firstname,$lastname,$role,$password,$passConfirm){
+    public function signUp($firstname,$lastname,$email,$password,$role,$passConfirm){
 
-        $emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
-        $nameRegex = "^[a-zA-Z0-9]+$";
-        if(empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($role)){
-            header("Location: public/signup.php?error=emptyInputs");
+        $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+        $nameRegex = "/^[a-zA-Z][a-zA-Z0-9]$/";
+        
+        if(empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($role) || empty($passConfirm)){
+            header("Location: ../public/signup.php?error=emptyInputs");
             exit();
         }
 
         if(!preg_match($emailRegex,$email)){
-          header("Location: public/signup.php?error=invaliemail");
+          header("Location: ../public/signup.php?error=invaliemail");
           exit();
         }
 
-        if(!preg_match($nameRegex,$firstname) || !preg_match($nameRegex,$lastname)){
-          header("Location: public/signup.php?error=invalidfirstname?lastname");
-          exit();
-        }
+        // if(!preg_match($nameRegex,$firstname) || !preg_match($nameRegex,$lastname)){
+        //   header("Location: ../public/signup.php?error=invalidfirstname?lastname");
+        //   exit();
+        // }
+
         if($password != $passConfirm){
-          header("Location: public/signup.php?error=passwordsnotmatch");
+          header("Location: ../public/signup.php?error=passwordsnotmatch");
           exit();
         }
         
-        $Visitor = new Visitor();
-        $Visitor->$this->createUser($firstname,$lastname,$email,$role,$password);
+        $visitor = new Visitor();
+        $visitor->createUser($firstname,$lastname,$email,$role,$password);
     
     }
 

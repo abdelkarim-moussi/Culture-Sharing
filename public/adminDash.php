@@ -1,3 +1,16 @@
+<?php
+session_start();
+if(isset($_SESSION['userId'])){
+
+    if($_SESSION['urole'] === "author"){
+        header("Location: authorDash.php");
+    }
+    elseif($_SESSION['urole'] === "visitor"){
+        header("Location: index.php");
+    }
+
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +38,7 @@
                     <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="authors" href="#">Authors</a></li>
                     <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="visitors" href="#">Visitors</a></li>
                     <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list"></i><a data-id ="articles" href="#">Articles</a></li>
-                    <li class="toggeled-item absolute bottom-5 text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.php">logout</a></li>
+                    <li class="toggeled-item absolute bottom-5 text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.inc.php">logout</a></li>
                 </ul>
             </div>
             
@@ -76,7 +89,7 @@
 <!-- Add Categorie section -->
     <section class="w-full section text-[#111C2D] bg-white rounded-lg shadow-md sec2" id="addCategorie">
     <h1 class="text-lg mb-5 border-b pb-5 capitalize">Add new categorie</h1>
-    <form class="space-y-4 md:space-y-6" action="/" method="post" id="signup-form" enctype="multipart/form-data">
+    <form class="space-y-4 md:space-y-6" action="../includes/categorie.inc.php" method="post" id="signup-form" enctype="multipart/form-data">
                  <div>
                       <label for="cat-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">categorie name</label>
                       <input type="text" name="cat-name" id="cat-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="categorie example">
@@ -197,7 +210,7 @@
             <h3>my articles</h3>
         </div>
     </div>
-    <h1 class="text-lg mb-5 border-b pb-5 capitalize">My disponible articles</h1>
+    <h1 class="text-lg mb-5 border-b pb-5 capitalize">disponible articles</h1>
 
     <table class="w-full rounded-lg">
          <thead>

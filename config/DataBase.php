@@ -1,23 +1,40 @@
 <?php
+// require_once "dbconfig.php";
 
 class DataBase{
+   private $dsn = "mysql:host=localhost;dbname=csdb";
+   private $user = "root";
+   private $password = "karim@mysql@25";
+   private static $instance;
+   private $connection;
 
-    private $dsn = 'mysql:host=localhost;dbname:csdb';
-    private $username = 'root';
-    private $password = 'karim@mysql@25';
-
-    protected function connect(){
+    private function __construct(){
 
        try{
-            $pdo = new PDO($this->dsn,$this->username,$this->password);
+            $this->connection = new PDO($this->dsn,$this->user,$this->password);
+            $this->connection -> setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
+            $this->connection -> setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
-            $pdo -> setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
-            $pdo -> setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            return $pdo;
-
-       }catch(PDOException $exception){
-          die('connection failed'.$exception->getMessage());
+       }catch(PDOException $e){
+          die('connection failed'.$e->getMessage());
        }
     }
 
+    public static function getInstance(){
+      if(!isset(self::$instance)){
+         self::$instance = new self;
+      }
+      return self::$instance;
+    }
+
+    public function getConnection(){
+      return $this->connection;
+    }
+
+   
 }
+
+
+
+
+

@@ -6,25 +6,25 @@ include_once "../classes/Author.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
 
-    if(isset($_POST["title"])&& isset($_POST["content"]) && isset($_POST["image"]) && isset($_POST["categorie"])){
-
-        $title = $_POST["title"];
-        $content = $_POST["content"];
-        
-        $filename = $_FILES["image"]["name"];
-        $fileTmpName = $_FILES["image"]["tmp_name"];
-        $newFileName = uniqid() ."-" .$filename;
-        move_uploaded_file($fileTmpName,"../uploads/".$newFileName);
+    $title = $_POST["title"];
+    $content = $_POST["content"];
     
-        $categorie = $_POST["categorie"];
+    $filename = $_FILES["image"]["name"];
+    $fileTmpName = $_FILES["image"]["tmp_name"];
+    $newFileName = uniqid() ."-" .$filename;
+    move_uploaded_file($fileTmpName,"../uploads/".$newFileName);
 
-        $author_id = $_SESSION["user_id"];
+    $categorie = $_POST["categorie"];
+
+    $author_id = $_SESSION["userId"];
+
+    if(isset($title) && isset($content) &&  isset($categorie) && isset($newFileName)){
         
         $article = new Article($title,$content,$newFileName,$author_id,$categorie);
         $authAr = new AuthorContr();
         $authAr->setArticle($article);
 
-        header("Location: ../authorDash.php");
+        // header("Location: ../authorDash.php");
 
     }
    

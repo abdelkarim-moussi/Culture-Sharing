@@ -1,51 +1,46 @@
 <?php 
+
 include_once "../config/DataBase.php";
 
-class User extends DataBase{
+class User {
 
-    protected function getUser($email,$password){
-        $sql = $this->connect()->prepare("SELECT password FROM users 
-        WHERE email = ?");
+    protected function getUser($email, $password) {
+        // Start session at the beginning
 
-        if(!$sql -> execute([$email])){
-            $sql = null;
-            exit();
-        }
+        // Access the database
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
 
-        if($sql->rowCount() == 0){
-          $sql = null;
-          header("Location: ../public/login.php?error=usernotfound");
-          exit();
-        }
-        
-        $hachedPass = $sql->fetchAll();
-        $checkPass = password_verify($password,$hachedPass[0]["password"]);
+        try {
+            // Prepare query to fetch hashed password by email
+            $sql = $conn->prepare("SELECT * FROM users WHERE email = :email");
+            $sql->bindParam(':email',$email);
+            $sql->execute();
 
-        if($checkPass === false){
-            $sql = null;
-            header('Location: ../public/login.php?error=passwordincorect');
-            exit();
-        }
-
-        else if($checkPass === true){
-            $stmt = $this->connect()->prepare("SELECT * FROM users 
-            WHERE email = ? AND password = ?");
-
-            if(!$stmt->execute([$email,$hachedPass[0]["password"]])){
-                $sql = null;
-                header("Location: ../public/login.php?error=stmfailed");
+            // Check if the user exists
+            if ($sql->rowCount() == 0) {
+                header("Location: ../public/login.php?error=usernotfound");
                 exit();
             }
 
-            $user = $stmt->fetchAll();
+            $user = $sql->fetch(PDO::FETCH_ASSOC); // Use fetch() for single-row retrieval
 
-            session_start();
+            // Verify the password
+            if (!password_verify($password, $user["password"])) {
+                header("Location: ../public/login.php?error=passwordincorrect");
+                exit();
+            }
 
-            $_SESSION["username"] = $user[0]["firstname"];
-            $_SESSION["userId"] = $user[0]["user_id"];
+            $_SESSION["username"] = $user["firstname"];
+            $_SESSION["userId"] = $user["user_id"];
+            $_SESSION["urole"] = $user["role"];
 
+
+        } catch (PDOException $e) {
+            // Log error for debugging
+            error_log("Database Error: " . $e->getMessage());
+            header("Location: ../public/login.php?error=stmfailed");
+            exit();
         }
-        
-     
     }
 }

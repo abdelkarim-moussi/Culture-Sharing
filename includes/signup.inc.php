@@ -1,6 +1,6 @@
 <?php
 
-include_once "classes/Visitor-Contr.php";
+include_once "../classes/Visitor-Contr.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
     
@@ -9,11 +9,15 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
     $lastname = $_POST["lastname"];
     $role = $_POST["role"];
     $password = $_POST["password"];
-    $passConfirm = $_POST["passconfirm"];
+    $passConfirm = $_POST["confirm-password"];
 
-    if(isset($email) && isset($firstname) && isset($lastname) && isset($role) && isset($password) && isset($passConfirm)){
-        $user = new VisitorContr();
-        $user->$this->signUp($email,$firstname,$lastname,$role,$password,$passConfirm);
-        header("Location: ../public/index.php");
+    echo $role;
+
+    if(!isset($email) && !isset($firstname) && !isset($lastname) && !isset($role) && !isset($password) && !isset($passConfirm)){
+        echo "error";
     }
+
+    $user = new VisitorContr();
+    $user->signUp($firstname,$lastname,$email,$password,$role,$passConfirm);
+    // header("Location: ../public/index.php");
 }

@@ -1,4 +1,5 @@
 <?php
+include_once "user.php";
 
 class UserContr extends User{
 
@@ -22,7 +23,7 @@ class UserContr extends User{
     }
 
     
-    protected function login($email,$password){
+    public function login($email,$password){
 
         if(empty($email) || empty($password)){
             header("Location: public/login.php?error=emptyInputs");

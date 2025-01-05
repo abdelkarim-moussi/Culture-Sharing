@@ -1,37 +1,40 @@
 <?php
+// Include database configuration
+include_once "../config/DataBase.php";
 
-class Visitor extends User{
+class Visitor {
 
-    
-    protected function createUser($firstname,$lastname,$email,$role,$password){
+    protected function createUser($firstname, $lastname, $email, $role, $password) {
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+        
+            // Check if email already exists
+            $sql = $conn->prepare("SELECT email FROM users WHERE email = :email");
+            $sql->bindParam(":email", $email, PDO::PARAM_STR);
+            $sql->execute();
 
-        $sql = $this->connect()->prepare("SELECT * FROM users WHERE email = ?;");
-
-        if(!$sql->execute($email)){
-          $sql = null;
-          header("Location: ../public/signup.php?error=failed");
-          exit();
-        }
-
-        if($sql->rowCount() > 0){
-            $result = $sql->fetchAll();
-
-            if($email === $result[0]["email"]){
-                $sql = null;
+            if ($sql->rowCount() > 0) {
                 header("Location: ../public/signup.php?error=emailalreadyexist");
                 exit();
             }
-        }
 
-        elseif($sql->rowCount() == 0){
+            // Hash the password
+            $hashedPass = password_hash($password, PASSWORD_BCRYPT);
 
-           $sql = $this->connect()->prepare("INSERT INTO users(firstname,lastname,email,password,role)
-           VALUES(?, ?, ?, ?, ?);");
-           
-           $hachedPass = password_hash($password,PASSWORD_BCRYPT);
-           
-           $sql -> execute([$firstname,$lastname,$email,$hachedPass,$role]); 
-        }
-      
+            // Insert new user into the database
+            $insertSQL = $conn->prepare("INSERT INTO users (firstname, lastname, email, password, role) VALUES (:firstname, :lastname, :email, :password, :role)");
+            $insertSQL->bindParam(":firstname", $firstname, PDO::PARAM_STR);
+            $insertSQL->bindParam(":lastname", $lastname, PDO::PARAM_STR);
+            $insertSQL->bindParam(":email", $email, PDO::PARAM_STR);
+            $insertSQL->bindParam(":password", $hashedPass, PDO::PARAM_STR);
+            $insertSQL->bindParam(":role", $role);
+            // $insertSQL->execute();
+            if ($insertSQL->execute()) {
+                header("Location: ../public/index.php?executed");
+            } else {
+                error_log("Insert Query Failed: " . implode(", ", $insertSQL->errorInfo()));
+                header("Location: ../public/signup.php?error=insert-failed");
+            }
+
     }
 }

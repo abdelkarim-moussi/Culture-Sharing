@@ -1,3 +1,12 @@
+<?php 
+session_start();
+if($_SESSION["urole"] === "author"){
+    header("Location:authorDash.php");
+}
+elseif($_SESSION["urole"] === "visitor"){
+    header("Location:index.php");
+} 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +21,11 @@
 
 <header class="header w-full max-w-[900px] fixed mx-auto bg-white py-3 px-5 rounded-lg shadow-md flex items-center justify-between left-[50%] translate-x-[-50%]">
   <h1 class="text-orange-400 font-semibold text-[1.2rem] capitalize">Culutre/<span class="text-[#111C2D]">Sharing</span></h1>
-  <a href="../includes/logout.php" class="hover:text-orange-400"><i class="fa-solid fa-sign-out"></i> logout</a>
+  
+  <div class="flex gap-4">
+  <a href="../includes/logout.inc.php" class="hover:text-orange-400"><i class="fa-solid fa-sign-out"></i> logout</a>
+  <a href="" class="hover:text-orange-400"><i class="fa-solid fa-user"></i></a>
+  </div>
 </header>
 
 <main class="w-full flex flex-col gap-5 max-w-[900px] mx-auto bg-white p-5 rounded-lg shadow-md mt-[80px]">
@@ -23,9 +36,10 @@
         </select>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        
         <div class="rounded-lg shadow-md flex flex-col gap-2 text-center">
             <img class="w-full rounded-t-lg" src="assets/imgs/img1.jpg" alt="article image">
-            <h3 class="text-[1.1rem] hover:text-orange-400"><a href="/">Article Title</a></h3>
+            <h3 class="text-[1.1rem] hover:text-orange-400"><a href="detailArticle.php">Article Title</a></h3>
             <p class="mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
             <!-- <a href="" class="mb-5 underline text-[1rem] hover:text-orange-400 capitalize">view details</a> -->
         </div>

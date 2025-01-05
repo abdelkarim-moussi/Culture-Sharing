@@ -1,5 +1,7 @@
 <?php
-include_once "classes/User-Contr.php";
+session_start();
+include_once "../classes/User-Contr.php";
+
 if($_SERVER['REQUEST_METHOD'] === "POST"){
     
     $email = $_POST["email"];
@@ -7,7 +9,14 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 
     if(isset($email) && isset($password)){
         $user = new UserContr();
-        $user->$this->login($email,$password);
+        $user->login($email,$password);
         header("Location: ../public/index.php");
+
+        // if($_SESSION["useRole"] === "author"){
+        //     header("Location: ../public/authorDash.php");
+        // }
+        // elseif($_SESSION["useRole"] === "visitor"){
+        //     header("Location: ../public/index.php");
+        // } 
     }
 }

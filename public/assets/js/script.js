@@ -5,6 +5,7 @@ const toggledItems = document.querySelectorAll(".toggeled-item");
 const sections = document.querySelectorAll("section");
 const globalSections = document.querySelector("body")
 const addnewCatBtn = document.getElementById("addnewcat");
+const addnewArtBtn = document.getElementById("addnewart");
 
 
 
@@ -57,3 +58,12 @@ addnewCatBtn.addEventListener("click",()=>{
    document.getElementById("categories").classList.remove("active");
    document.getElementById("addCategorie").classList.add("active");
 })
+
+
+addnewArtBtn.addEventListener("click",()=>{
+   console.log("clicked");
+   document.getElementById("articles").classList.remove("active");
+   document.getElementById("addArticle").classList.add("active");
+})
+
+

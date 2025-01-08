@@ -3,13 +3,13 @@ include_once "visitor.php";
 
 class VisitorContr extends Visitor{
 
-
     private string $firstname;
     private string $lastname;
     private string $email;
     private string $password;
     private string $passConfirm;
     private string $role;
+    private string $image;
 
     //firstname getter and setter
     public function getFirstName(){
@@ -57,9 +57,16 @@ class VisitorContr extends Visitor{
     public function setRole($role){
       $this -> email = $role;
     }
+    //role getter and setter
+    public function getImage(){
+        return $this -> image;
+    }
+    public function setImage($image){
+      $this -> email = $image;
+    }
 
     
-    public function signUp($firstname,$lastname,$email,$password,$role,$passConfirm){
+    public function signUp($firstname,$lastname,$email,$password,$role,$passConfirm,$image){
 
         $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
         $nameRegex = "/^[a-zA-Z][a-zA-Z0-9]$/";
@@ -85,8 +92,10 @@ class VisitorContr extends Visitor{
         }
         
         $visitor = new Visitor();
-        $visitor->createUser($firstname,$lastname,$email,$role,$password);
+        $visitor->createUser($firstname,$lastname,$email,$role,$password,$image);
     
     }
+
+    
 
 }

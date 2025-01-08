@@ -28,30 +28,30 @@ else header("Location: login.php");
 <!-- <button id="menu-button" type="button" class="text-[#111C2D] z-20 px-1 rounded absolute top-5 left-6 hover:text-orange-500"><i class="fa-solid fa-bars text-xl"></i></button> -->
 <section id="nav-bar" class="px-3 text-[#111C2D] h-[95vh] w-[250px] bg-white notActive rounded-lg shadow-md">
             <div class="flex items-center justify-center py-2 border-b-[1px] border-gray-300">
-                <h4 class="text-orange-500 font-extrabold text-[1.2rem] mt-5">Culture<span class="text-[#111C2D]">/Sharing</span>
+                <h4 class="text-orange-500 font-extrabold text-[1.1rem] mt-5">Culture<span class="text-[#111C2D]">/Sharing</span>
                 </h4>
             </div>
             
             <div class="py-5 dach">
                 <ul class="pl-2 flex flex-col gap-y-6">
-                    <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center active-btn" ><i class="fa-solid fa-gauge"></i><a data-id ="categories" href="#">Categories</a></li>
-                    <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list-check"></i><a data-id ="addCategorie" href="#">Add Categorie</a></li>
-                    <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="authors" href="#">Authors</a></li>
-                    <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="visitors" href="#">Visitors</a></li>
-                    <li class="toggeled-item text-[1rem] font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list"></i><a data-id ="articles" href="#">Articles</a></li>
-                    <li class="toggeled-item absolute bottom-5 text-[1rem] font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.inc.php">logout</a></li>
+                    <li class="toggeled-item text-sm font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center active-btn" ><i class="fa-solid fa-gauge"></i><a data-id ="categories" href="#">Categories</a></li>
+                    <li class="toggeled-item text-sm font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list-check"></i><a data-id ="addCategorie" href="#">Add Categorie</a></li>
+                    <li class="toggeled-item text-sm font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="authors" href="#">Authors</a></li>
+                    <li class="toggeled-item text-sm font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-users-gear"></i><a data-id ="visitors" href="#">Visitors</a></li>
+                    <li class="toggeled-item text-sm font-bold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-list"></i><a data-id ="articles" href="#">Articles</a></li>
+                    <li class="toggeled-item absolute bottom-5 text-sm font-semibold tracking-wide  hover:text-orange-500 flex gap-3 items-center" ><i class="fa-solid fa-sign-out"></i><a href="../includes/logout.inc.php">logout</a></li>
                 </ul>
             </div>
             
 </section>
     
-<main class="w-full main-section">
+<main class="w-full main-section text-sm">
 
 <!-- categories -->
-    <section class="w-full section text-[#111C2D] bg-white rounded-lg shadow-md sec1 categories active" id="categories">
+    <section class="w-full section text-[#111C2D] bg-white rounded-lg shadow-md sec1 categories active relative" id="categories">
         <div class="border-b pb-2 flex justify-between items-center mb-5">
             <h1 class="text-lg mb-5 capitalize">Disponible categories</h1>
-            <button id="addnewcat" class="bg-orange-200 px-5 py-2 rounded-md capitalize hover:bg-orange-300">add new categorie</button>
+            <button id="addnewcat" class="bg-orange-200 px-3 py-1 text-sm rounded-md capitalize hover:bg-orange-300">add new categorie</button>
         </div>
 
         <table class="w-full rounded-lg">
@@ -78,7 +78,8 @@ else header("Location: login.php");
               <?php foreach($adm->showArtNumByCat() as $numar){echo $numar["num"];} ?>
               </td>
               <td class="font-normal flex justify-center gap-3">
-                <a href="" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">update</a>
+              <!-- <button id="open">up</button> -->
+                <a href="javascript:void(0);" onclick="openModal('<?php echo $cat['categorie_id'];?>','<?php echo $cat['categorie_name'];?>','<?php echo $cat['description'];?>')"  class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">update</a>
                 <a href="../includes/categorie.inc.php?idcat=<?php echo $cat['categorie_id']; ?>" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
               </td>
 
@@ -88,7 +89,37 @@ else header("Location: login.php");
          </tbody>
       </table>
 
+      <!-- update categorie -->
+<div class="w-full hidden bg-white rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 fixed top-5" id="updateCatModal">
+        <img src="../public/assets/imgs/close.png" alt="" class="w-[30px] float-right m-3 cursor-pointer" onclick="closeModal()" id="closeUpCatModal">
+          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 class="text-xl border-b pb-3 text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                 Update categorie
+              </h1>
+    
+            <form class="space-y-4 md:space-y-6" action="../includes/categorie.inc.php" method="post" id="">
+
+                 <div>
+                      <label for="cat-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">categorie name</label>
+                      <input type="text" name="catName" id="catName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                 </div>
+                 <div>
+                    <label for="cat-description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">categorie description</label>
+                    <textarea name="catDes" id="catDes" class="h-[150px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                 </div>
+
+                    <input type="hidden" name="catId" id="catId">
+
+                  <button type="submit" name="update-categorie" id="update-cat" class="w-full uppercase tracking-wide text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">update Categorie</button>
+        
+            </form>
+
+          </div>
+    </div>
+
     </section>
+
+
 
 <!-- Add Categorie section -->
     <section class="w-full section text-[#111C2D] bg-white rounded-lg shadow-md sec2" id="addCategorie">
@@ -103,11 +134,10 @@ else header("Location: login.php");
                     <textarea name="cat-description" id="cat-description" class="h-[150px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="categorie..."></textarea>
                     <div class="error text-sm text-red-600"></div>
                 </div>
-            
                 
-                  <button type="submit" id="add-cat" class="w-full uppercase tracking-wide text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add Categorie</button>
+                  <button type="submit" name="addCat" id="add-cat" class="w-full uppercase tracking-wide text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add Categorie</button>
         
-            </form>
+    </form>
     </section>
 
 <!-- Authors list -->
@@ -138,7 +168,7 @@ else header("Location: login.php");
              <td class="font-normal">
              <?php echo $user["email"]; ?>
              </td>
-             <?php foreach($adm->calcArticles() as $artNum){ ?>
+             <?php foreach($adm->calcArticles($user["user_id"]) as $artNum){ ?>
              <td class="font-normal">
                 <?php echo $artNum["numar"] ?>
              </td>
@@ -238,7 +268,7 @@ else header("Location: login.php");
             <h3>refused articles</h3>
         </div>
     </div>
-    <h1 class="text-lg mb-5 border-b pb-5 capitalize">disponible articles</h1>
+    <h1 class="text-lg mb-5 border-b pb-5 capitalize">pending articles</h1>
 
     <table class="w-full rounded-lg">
          <thead>
@@ -268,8 +298,12 @@ else header("Location: login.php");
                   <p class="bg-blue-50 rounded-md"><?php echo $article["status"];?></p>
               </td>
               <td class="font-normal flex justify-center gap-3">
-                <a href="../includes/article.inc.php?acidart=<?php echo $article['article_id']; ?>" class="bg-green-100 hover:bg-green-200 rounded-md py-1 px-3">accept</a>
-                <a href="../includes/article.inc.php?refidart=<?php echo $article['article_id']; ?>" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">refuse</i></a>
+                <?php if($article['status'] === 'pending'){ ?>
+                    <a href="../includes/article.inc.php?acidart=<?php echo $article['article_id']; ?>" class="bg-green-100 hover:bg-green-200 rounded-md py-1 px-3">accept</a>
+                    <a href="../includes/article.inc.php?refidart=<?php echo $article['article_id']; ?>" class="bg-orange-100 hover:bg-orange-200 rounded-md py-1 px-3">refuse</i></a>
+                <?php }else{?>
+                    <a href="../includes/article.inc.php?idart=<?php echo $article['article_id']; ?>" class="bg-red-100 hover:bg-red-200 rounded-md py-1 px-3">delete</i></a>
+                <?php }?>
               </td>
             </tr>
          <?php } ?>
@@ -284,7 +318,25 @@ else header("Location: login.php");
 
 
 
+<script>
 
+const catModal = document.getElementById("updateCatModal");
+var catId;
+var catName;
+var catDesc;
+function openModal(catId,catName,catDesc){
+
+   catModal.classList.remove("hidden");
+
+   document.getElementById("catName").value = catName;
+   document.getElementById("catDes").textContent = catDesc;
+   document.getElementById("catId").value = catId;
+
+}
+
+
+
+</script>
 <script src="assets/js/script.js?v=<?php echo time(); ?>"></script>
     
 </body>

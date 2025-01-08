@@ -1,5 +1,6 @@
 <?php
 include_once "Categorie.php";
+include_once "User.php";
 include_once "../config/DataBase.php";
 
 class Admin{
@@ -42,6 +43,20 @@ class Admin{
         $deletQuery->bindParam(":idcategorie",$idcategorie);
         $deletQuery->execute();
         header("Location: ../public/adminDash.php");
+    }
+
+    public function UpdateCategorie($categorieId,$categorieName,$categorieDesc){
+
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $updateCat = $conn->prepare("UPDATE categories 
+        SET categorie_name = :name, description = :description
+        WHERE categorie_id = :id");
+        $updateCat->bindParam(":name",$categorieName);
+        $updateCat->bindParam(":description",$categorieDesc);
+        $updateCat->bindParam(":id",$categorieId);
+        $updateCat->execute();
     }
 
     public function showArticles(){
@@ -87,12 +102,13 @@ class Admin{
 
     }
 
-    public function calcArticles(){
+    public function calcArticles($userId){
         $db = DataBase::getInstance();
         $conn = $db->getConnection();
 
-        $visitors = $conn->prepare("SELECT COUNT(*) AS numar FROM articles INNER JOIN users WHERE articles.user_id = users.user_id");
-        $visitors->execute();
+        $visitors = $conn->prepare("SELECT COUNT(*) AS numar FROM articles 
+        WHERE user_id = ?");
+        $visitors->execute([$userId]);
         $result = $visitors->fetchAll();
         return $result;
 

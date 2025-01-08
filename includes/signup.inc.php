@@ -11,13 +11,16 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
     $password = $_POST["password"];
     $passConfirm = $_POST["confirm-password"];
 
-    echo $role;
+    $filename = $_FILES["image"]["name"];
+    $fileTmpName = $_FILES["image"]["tmp_name"];
+    $newFileName = uniqid() ."-" .$filename;
+    move_uploaded_file($fileTmpName,"../profile-imgs/".$newFileName);
 
     if(!isset($email) && !isset($firstname) && !isset($lastname) && !isset($role) && !isset($password) && !isset($passConfirm)){
         echo "error";
     }
 
     $user = new VisitorContr();
-    $user->signUp($firstname,$lastname,$email,$password,$role,$passConfirm);
+    $user->signUp($firstname,$lastname,$email,$password,$role,$passConfirm,$newFileName);
     // header("Location: ../public/index.php");
 }

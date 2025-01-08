@@ -7,6 +7,11 @@ const globalSections = document.querySelector("body")
 const addnewCatBtn = document.getElementById("addnewcat");
 const addnewArtBtn = document.getElementById("addnewart");
 
+// const catModal = document.getElementById("updateCatModal");
+
+const closeUpCatModal = document.getElementById("closeUpCatModal");
+
+const open = document.getElementById("open");
 
 
 // function toggleNavbar(){
@@ -66,4 +71,17 @@ addnewArtBtn.addEventListener("click",()=>{
    document.getElementById("addArticle").classList.add("active");
 })
 
+// function openModal(catId,catName,catDesc){
+
+//    catModal.classList.remove("hidden");
+
+//    document.getElementById("catId").value = catId;
+//    document.getElementById("catName").value = catName;
+//    document.getElementById("catDes").value = catDesc;
+// }
+
+
+function closeModal(){
+      catModal.classList.add("hidden");
+}
 

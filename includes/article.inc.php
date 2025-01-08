@@ -6,6 +6,8 @@ include_once "../classes/Author.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
 
+    if(isset($_POST["add-art"])){
+
     $title = $_POST["title"];
     $content = $_POST["content"];
     
@@ -31,27 +33,27 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 
     }
    
-
+    }
 }
 
-
+//delete article
 if(isset($_GET["idart"])){
     $article_id = $_GET["idart"];
     $author = new Author();
     $author->deleteArticle($article_id);
 }
 
+//update article
 
-if(isset($_POST["update"])){
+if(isset($_POST["update-article"])){
     
-    if(isset($_POST["title"]) && isset($_POST["content"]) && isset($_POST["image"]) && isset($_POST["categorie"])){
+    if(isset($_POST["title"]) && isset($_POST["content"]) && isset($_POST["artId"])){
+        echo "done";
 
         $title = $_POST["title"];
         $content = $_POST["content"];
 
-        $categorie = $_POST["categorie"];
-
-        $author_id = $_SESSION["user_id"];
+        $articleId = $_POST["artId"];
 
         if($_FILES["image"]["error"] != 4){
             $filename = $_FILES["image"]["name"];
@@ -62,12 +64,13 @@ if(isset($_POST["update"])){
         
         $authAr = new Author();
 
-        $authAr->updateArticle($title,$categorie,$content,$newFileName);
+        $authAr->updateArticle($articleId,$title,$content,$newFileName);
 
-        header("Location: ../authorDash.php?articleudpdatedsucces");
+        // header("Location: ../public/authorDash.php?articleudpdatedsucces");
     }
    
 }
+
 
 if(isset($_GET["acidart"])){
     $article_id = $_GET["acidart"];
@@ -79,4 +82,10 @@ if(isset($_GET["refidart"])){
     $article_id = $_GET["refidart"];
     $author = new Author();
     $author->updateStatus("refused",$article_id);
+}
+
+if(isset($_GET["ida"])){
+    $article_id = $_GET["ida"];
+    $article = new Author();
+    $article->articleDetails($article_id);
 }

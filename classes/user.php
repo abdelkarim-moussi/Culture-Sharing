@@ -4,6 +4,60 @@ include_once "../config/DataBase.php";
 
 class User {
 
+    private string $firstname;
+    private string $lastname;
+    private string $email;
+    private string $password;
+    private string $passConfirm;
+    private string $role;
+
+    //firstname getter and setter
+    public function getFirstName(){
+        return $this -> firstname;
+    }
+    public function setFirstName($firstname){
+      $this -> firstname = $firstname;
+    }
+
+    //lastname getter and setter
+    public function getLastName(){
+        return $this -> lastname;
+    }
+    public function setLastName($lastname){
+      $this -> firstname = $lastname;
+    }
+
+    //email getter and setter
+    public function getEmail(){
+        return $this -> email;
+    }
+    public function setEmail($email){
+      $this -> email = $email;
+    }
+
+    //password getter and setter
+    public function getPassword(){
+        return $this -> password;
+    }
+    public function setPassword($password){
+      $this -> email = $password;
+    }
+    //password confirm getter and setter
+    public function getPassConfirm(){
+        return $this -> passConfirm;
+    }
+    public function setPassConfirm($passConfirm){
+      $this -> email = $passConfirm;
+    }
+
+    //role getter and setter
+    public function getRole(){
+        return $this -> role;
+    }
+    public function setRole($role){
+      $this -> email = $role;
+    }
+
     protected function getUser($email, $password) {
         // Start session at the beginning
 
@@ -43,4 +97,43 @@ class User {
             exit();
         }
     }
+
+
+    public function UserInfo($userId){
+
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $getUser = $conn->query("SELECT * FROM users WHERE user_id = $userId");
+        $result = $getUser->fetch();
+        return $result;
+
+    }
+
+
+    public function updateUser($userId,$firstname,$lastname,$email,$image){
+
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $updateUser = $conn->prepare("UPDATE users
+        SET firstname = ?, lastname = ?, email = ?, user_image = ?
+        WHERE user_id = ?");
+        $updateUser->execute([$firstname,$lastname,$email,$image,$userId]);
+        
+        header("Location: ../public/index.php");
+
+    }
+
+    public function getOldImage($userId){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $selectImage = $conn->query("SELECT user_image FROM users WHERE user_id = $userId");
+        $result = $selectImage->fetch();
+        return $result;
+    }
+
+
+
 }

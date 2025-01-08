@@ -41,9 +41,9 @@ class Author extends Visitor{
         $db = DataBase::getInstance();
         $conn = $db->getConnection();
 
-        $author_id = $_SESSION["userId"];
+        // $author_id = $_SESSION["userId"];
 
-        $stmt = $conn->query("DELETE FROM articles WHERE article_id = $article_id AND user_id = $author_id");
+        $stmt = $conn->query("DELETE FROM articles WHERE article_id = $article_id");
         
         if(!$stmt->execute()){
             $stmt = null;
@@ -54,24 +54,6 @@ class Author extends Visitor{
 
     }
 
-    public function updateArticle($title,$categorie,$content,$image){
-        $db = DataBase::getInstance();
-        $conn = $db->getConnection();
-
-        $author_id = $_SESSION["userId"];
-        $catstmt =$conn->prepare("SELECT cetegorie_id FROM categories WHERE categorie_name = ?");
-        $catstmt->execute([$categorie]);
-        $catstmt->fetchAll();
-        $categorie_id = $catstmt[0]["categorie_id"];
-
-        $stmt = $conn->prepare("UPDATE TABLE articles SET categorie_id = ?, title = ?, content = ?, image = ? WHERE user_id = ?");
-        
-        if(!$stmt ->execute([$categorie_id,$title,$content,$image,$author_id])){
-            $stmt = null;
-            header("Location: ../public/authorDash.php?error=failedUpdatingarticle");
-            exit();
-        }
-    }
 
     public function showArticles(){
         $db = DataBase::getInstance();
@@ -116,6 +98,32 @@ class Author extends Visitor{
 
         header("Location: ../public/adminDash.php");
       
+    }
+
+    public function articleDetails($article_id){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = $conn->prepare("SELECT * FROM articles JOIN users JOIN categories WHERE articles.user_id = users.user_id AND articles.categorie_id = categories.categorie_id AND article_id = ?");
+        $sql -> execute([$article_id]);
+        return $result = $sql->fetchAll();
+        header("Location: ../public/detailArticle.php");
+    }
+
+    public function UpdateArticle($articleId,$title,$content,$image){
+
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $updateCat = $conn->prepare("UPDATE articles 
+        SET title = :title, content = :content , image = :image , status = 'pending'
+        WHERE article_id = :id");
+        $updateCat->bindParam(":title",$title);
+        $updateCat->bindParam(":content",$content);
+        $updateCat->bindParam(":image",$image);
+        $updateCat->bindParam(":id",$articleId);
+        $updateCat->execute();
+        header("Location: ../authorDash.php?articleudpdatedsucces");
     }
 
     

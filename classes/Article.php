@@ -1,4 +1,5 @@
 <?php
+include_once "../config/DataBase.php";
 
 class Article{
     
@@ -57,4 +58,5 @@ class Article{
     public function setCategorie($categorie){
         $this->categorie = $categorie;
     }
+
 }

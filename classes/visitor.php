@@ -4,7 +4,7 @@ include_once "../config/DataBase.php";
 
 class Visitor {
 
-    protected function createUser($firstname, $lastname, $email, $role, $password) {
+    protected function createUser($firstname, $lastname, $email, $role, $password,$image) {
         $db = DataBase::getInstance();
         $conn = $db->getConnection();
         
@@ -22,19 +22,37 @@ class Visitor {
             $hashedPass = password_hash($password, PASSWORD_BCRYPT);
 
             // Insert new user into the database
-            $insertSQL = $conn->prepare("INSERT INTO users (firstname, lastname, email, password, role) VALUES (:firstname, :lastname, :email, :password, :role)");
+            $insertSQL = $conn->prepare("INSERT INTO users (firstname, lastname, email, password, role, user_image) VALUES (:firstname, :lastname, :email, :password, :role, :image)");
             $insertSQL->bindParam(":firstname", $firstname, PDO::PARAM_STR);
             $insertSQL->bindParam(":lastname", $lastname, PDO::PARAM_STR);
             $insertSQL->bindParam(":email", $email, PDO::PARAM_STR);
             $insertSQL->bindParam(":password", $hashedPass, PDO::PARAM_STR);
             $insertSQL->bindParam(":role", $role);
+            $insertSQL->bindParam(":image", $image, PDO::PARAM_STR);
             // $insertSQL->execute();
             if ($insertSQL->execute()) {
-                header("Location: ../public/index.php?executed");
+                header("Location: ../public/login.php");
             } else {
-                error_log("Insert Query Failed: " . implode(", ", $insertSQL->errorInfo()));
                 header("Location: ../public/signup.php?error=insert-failed");
             }
 
+    }
+
+    public function displayArticles(){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = $conn->query("SELECT * FROM articles");
+        return $articles = $sql -> fetchAll();
+    }
+
+    public function relatedARticles($categorie,$recentId){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = $conn->prepare("SELECT * FROM articles INNER JOIN categories 
+        WHERE articles.categorie_id = categories.categorie_id AND categorie_name = ? AND article_id != ?");
+        $sql->execute([$categorie,$recentId]);
+        return $articles = $sql -> fetchAll();
     }
 }

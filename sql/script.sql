@@ -33,4 +33,16 @@ foreign key (categorie_id) references categoriescategoriescategories(categorie_i
 );
 
 
+-- Trouver le nombre total d'articles publiés par catégorie.
+
+SELECT COUNT(*) FROM articles GROUP BY categorie_id;
+
+-- Identifier les auteurs les plus actifs en fonction du nombre d'articles publiés.
+
+SELECT firstname,COUNT(*) AS num FROM users JOIN articles WHERE users.user_id = articles.user_id
+GROUP BY firstname
+ORDER BY num DESC;
+
+
+
 

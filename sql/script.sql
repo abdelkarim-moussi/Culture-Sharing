@@ -32,6 +32,32 @@ foreign key (user_id) references users(user_id) on delete cascade on update casc
 foreign key (categorie_id) references categoriescategoriescategories(categorie_id) on delete cascade on update cascade
 );
 
+-- comments table
+create table comments(
+comment_id int primary key auto_increment,
+visitor_id int,
+article_id int,
+com_content text not null,
+foreign key(visitor_id) references users(user_id) on delete cascade on update cascade,
+foreign key(article_id) references articles(article_id) on delete cascade on update cascade
+);
+
+-- tags table
+create table tags(
+  tag_id int primary key auto_increment,
+  tag_name varchar(10) not null
+);
+
+-- articles_tags associated table
+create table articles_tags(
+article_id int,
+tag_id int,
+primary key(article_id,tag_id),
+foreign key(article_id) references articles(article_id) on delete cascade on update cascade,
+foreign key(tag_id) references tags(tag_id) on delete cascade on update cascade
+);
+
+
 
 -- Trouver le nombre total d'articles publiés par catégorie.
 

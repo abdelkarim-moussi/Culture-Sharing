@@ -3,6 +3,7 @@ session_start();
 include_once "../classes/Author-Contr.php";
 include_once "../classes/Article.php";
 include_once "../classes/Author.php";
+include_once "../classes/Comment.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
 
@@ -88,4 +89,35 @@ if(isset($_GET["ida"])){
     $article_id = $_GET["ida"];
     $article = new Author();
     $article->articleDetails($article_id);
+    header("Location: ../public/detailArticle.php");
 }
+
+
+//comlents
+
+if(isset($_POST["subcommment"])){
+
+    if(!empty($_POST["comment"])){
+        $content = $_POST['comment'];
+        $articleId = $_POST['articleId'];
+        $visitorId = $_SESSION["userId"];
+        $comment = new Comment();
+        if($comment->createComment($visitorId,$articleId,$content)){
+            echo json_encode(['status'=>'success']);
+        }
+        else {
+            echo json_encode(['status'=>'error']);
+        }
+        exit();
+    }
+    
+}
+
+if(isset($_GET["fetchcomments"])){
+    $articleId = $_GET['articleId'];
+    $comment = new Comment();
+    $comments = $comment -> getComments($articleId);
+    echo json_encode($comments);
+    exit();
+}
+

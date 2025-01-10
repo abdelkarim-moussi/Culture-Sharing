@@ -6,6 +6,10 @@ include_once "../classes/Visitor.php";
 if(!isset($_SESSION["userId"])){
    header("Location: login.php");
 }
+
+if(!isset($_GET['ida']) || $_GET['ida'] == null || $_GET['ida'] === ''){
+    header("Location: index.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +41,22 @@ foreach($author->articleDetails($_GET["ida"]) as $article){
         <h4 class="text-md capitalize font-semibold">categorie <span class="underline font-normal"><?php echo $article['categorie_name']?></span></h4>
         <h3 class="text-md border-b pb-2 mb-3 font-semibold">Created By <span class="text-orange-400 font-normal"><?php echo $article['firstname']." ".$article['firstname']?></span></h3>
         <p class="max-w-[800px]"><?php echo $article['content']?></p>
+
     </article>
+
+    <section>
+    <!-- comments form -->
+        <form class="text-sm mt-20 border-t py-2" method="post" action="../includes/article.inc.php" id="comment-form">
+            <label for="comment" class="font-semibold capitalize">Leave a comment</label>
+            <textarea name="comment" id="comment" class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+            <input type="hidden" name="articleId" value="<?php echo $article['article_id']?>">
+            <button type="submit" name="subcommment" id="subcomment" class="bg-orange-400 py-2.5 px-4 mt-3 rounded-md text-white">save comment</button>
+        </form>
+
+        <div class="flex flex-col gap-4" id="comments">
+            
+        </div>
+    </section>
 <?php } ?>
     <section class="border-t mt-5 flex flex-col gap-5">
         <h1 class="text-[1.5rem] capitalize trucking-wide">Related Articles</h1>
@@ -61,6 +80,71 @@ foreach($author->articleDetails($_GET["ida"]) as $article){
     <a class="underline hover:text-orange-400 cursor-pointer capitalize mx-auto" href="index.php">view more</a>
     </section>
 </main>
+
+
+
+
+
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded",function(){
+    const commentForm = document.getElementById("comment-form");
+    const commentsContainer = document.getElementById("comments");
+    const articleId = document.querySelector("input[name='articleId']").value;
+    //load comments
+    loadComments();
+   commentForm.addEventListener("submit",function(e){
+      e.preventDefault();
+
+      const formData = new FormData(commentForm);
+
+      fetch("../includes/article.inc.php",{
+        method : 'POST',
+        body: formData
+      }).then(responce =>responce.json())
+      .then(data => {
+        if(data.status === "success"){
+            commentForm.reset();
+            loadComments();
+        }
+        else{
+            alert("error submitting data");
+        }
+      })
+   });
+
+function loadComments(){
+
+fetch(`../includes/article.inc.php?fetchcomments=1&articleId=${articleId}`)
+.then(responce => responce.json())
+.then(comments =>{
+    commentsContainer.innerHTML = "";
+
+    comments.forEach(comment=>{
+        const commentdiv = document.createElement("div");
+        commentdiv.className = "text-sm shadow-md p-3 rounded-lg bg-gray-100";
+        commentdiv.innerHTML = `
+            <div class="flex flex-col mb-2">
+               <h3 class="font-semibold capitalize"></h3>
+               <h3 class="">1 year ago</h3>
+            </div>
+            <p class="text-sm">${comment.com_content}</p>
+        `;
+
+        commentsContainer.appendChild(commentdiv);
+    });
+
+
+});
+
+}
+
+});
+
+
+</script>
 
 
 <footer class="flex items-center justify-center py-4">

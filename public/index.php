@@ -30,6 +30,7 @@ elseif($_SESSION["urole"] === "admin"){
   <div class="flex gap-4 items-center">
   <a href="../includes/logout.inc.php" class="hover:text-orange-400 text-sm"><i class="fa-solid fa-sign-out"></i> logout</a>
   <a href="" class="hover:text-orange-400"><i class="fa-solid fa-user text-sm"></i></a>
+  <button id="showFavories" class="hover:text-orange-400"><i class="fa-solid fa-heart"></i></button>
   </div>
 </header>
 
@@ -51,14 +52,66 @@ elseif($_SESSION["urole"] === "admin"){
         <div class="rounded-lg shadow-md flex flex-col gap-2 text-center">
             <img class="w-full h-[200px] rounded-t-lg" src="../uploads/<?php echo $article["image"];?>" alt="article image">
             <div class="p-3">
-            <h3 class="font-semibold text-orange-400 text-md capitalize"><?php echo $article["title"];?></h3>
-            <p class="mb-2 text-sm"><?php echo substr($article["content"],0,50);?></p>
-            <a href="detailArticle.php?ida=<?php echo $article["article_id"];?>" class="text-sm bg-orange-400 text-white py-1 px-3 rounded-md shadow-sm hover:bg-orange-500">View Details</a>
+              <h3 class="font-semibold text-orange-400 text-md capitalize"><?php echo $article["title"];?></h3>
+              <p class="mb-2 text-sm"><?php echo substr($article["content"],0,50);?></p>
+              <div class="flex gap-4 justify-center">
+              <a href="detailArticle.php?ida=<?php echo $article["article_id"];?>" class="text-sm bg-orange-400 text-white py-1 px-3 rounded-md shadow-sm hover:bg-orange-500">View Details</a>
+              <a href="../includes/article.inc.php?favId=<?php echo $article['article_id'];?>" class="bg-orange-400 px-1 rounded-lg hover:bg-orange-500"><i class="fa-regular fa-heart text-xl text-white "></i></a>
+              </div>
             </div>
             <!-- <a href="" class="mb-5 underline text-[1rem] hover:text-orange-400 capitalize">view details</a> -->
         </div>
         <?php } ?>
     </div>
 </main>
+
+<section id="favorie" class="w-[90%] lg:w-[30%] bg-gray-100 h-full fixed right-[100%] shadow-md overflow-auto">
+   <button type="button" id="close-fav-md" class="mb-5"><i class="fa-solid fa-close text-xl hover:text-orange-400"></i></button>
+   <div class="grid grid-cols-1 gap-5">
+   <?php 
+        $vis = new Visitor();
+        $idUser = $_SESSION['userId'];
+        if(count($vis->getFavoriteArticles($idUser)) == 0){
+         $res = "aucun article au favoris";
+         echo "<h1 class='text-center capitalize font-semibold'>$res</h1>";
+        }
+        else {
+            $res = $vis->getFavoriteArticles($idUser);
+        
+        foreach($res as $art){
+         ?>
+        <div class="rounded-lg shadow-md flex flex-col gap-2 text-center">
+            <img class="w-full h-[200px] rounded-t-lg" src="../uploads/<?php echo $art["image"];?>" alt="article image">
+            <div class="p-3">
+              <h3 class="font-semibold text-orange-400 text-md capitalize"><?php echo $art["title"];?></h3>
+              <p class="mb-2 text-sm"><?php echo substr($art["content"],0,50);?></p>
+              <div class="flex gap-4 justify-center">
+              <a href="detailArticle.php?ida=<?php echo $art["article_id"];?>" class="text-sm bg-orange-400 text-white py-1 px-3 rounded-md shadow-sm hover:bg-orange-500">View Details</a>
+              <a href="../includes/article.inc.php?favId=<?php echo $art['article_id'];?>" class="bg-orange-400 px-1 rounded-lg hover:bg-orange-500"><i class="fa-regular fa-heart text-xl text-white "></i></a>
+              </div>
+            </div>
+            <!-- <a href="" class="mb-5 underline text-[1rem] hover:text-orange-400 capitalize">view details</a> -->
+        </div>
+        <?php } }?>
+   </div>
+</section>
+
+
+
+<script>
+    const closeFavMod = document.getElementById("close-fav-md");
+    const favModal = document.getElementById("favorie");
+    const openFavorie = document.getElementById("showFavories");
+
+    openFavorie.addEventListener("click",()=>{
+        favModal.style.right = '0';
+        console.log("clicked");
+    })
+    closeFavMod.addEventListener("click",()=>{
+        // favModal.classList.add("hidden");
+        favModal.style.right = '100%';
+    })
+
+</script>
 </body>
 </html>

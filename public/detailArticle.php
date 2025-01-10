@@ -25,13 +25,22 @@ if(!isset($_GET['ida']) || $_GET['ida'] == null || $_GET['ida'] === ''){
 
 <header class="header w-full max-w-[900px] fixed mx-auto bg-white py-3 px-5 rounded-lg shadow-md flex items-center justify-between left-[50%] translate-x-[-50%]">
   <h1 class="text-orange-400 font-semibold text-[1.1rem] capitalize">Culutre/<span class="text-[#111C2D]">Sharing</span></h1>
+  
+  <div class="flex gap-4 items-center">
+  <a href="index.php" class="hover:text-orange-400 text-sm">home</a>
   <a href="../includes/logout.inc.php" class="hover:text-orange-400 text-sm"><i class="fa-solid fa-sign-out"></i> logout</a>
+  <a href="" class="hover:text-orange-400"><i class="fa-solid fa-user text-sm"></i></a>
+  <button id="showFavories" class="hover:text-orange-400"><i class="fa-solid fa-heart"></i></button>
+  </div>
 </header>
 
 <main class="w-full max-w-[900px] mx-auto bg-white p-5 rounded-lg shadow-md mt-[80px]">
 <?php $author = new Author(); 
 foreach($author->articleDetails($_GET["ida"]) as $article){
 ?>
+    <div class="border-t border-b my-3 py-2 relative">
+       <a href="../includes/article.inc.php" class="text-sm underline capitalize hover:text-orange-400 cursor-pointer">add to favories</a>
+    </div>
     <div>
         <img class="rounded-t-lg shadow-md h-[400px] w-full object-cover" src="../uploads/<?php echo $article['image']?>" alt="article image">
     </div>
@@ -96,10 +105,10 @@ document.addEventListener("DOMContentLoaded",function(){
     //load comments
     loadComments();
    commentForm.addEventListener("submit",function(e){
-      e.preventDefault();
+    //   e.preventDefault();
 
       const formData = new FormData(commentForm);
-
+      
       fetch("../includes/article.inc.php",{
         method : 'POST',
         body: formData

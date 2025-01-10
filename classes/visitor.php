@@ -1,6 +1,7 @@
 <?php
 // Include database configuration
 include_once "../config/DataBase.php";
+include_once "Favorie.php";
 
 class Visitor {
 
@@ -55,4 +56,30 @@ class Visitor {
         $sql->execute([$categorie,$recentId]);
         return $articles = $sql -> fetchAll();
     }
+
+    public function addToFavorie(Favorie $favorie){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+        $idArticle = $favorie->getArticleId();
+        $idUser = $favorie->getVisitorId();
+        try{
+            $insertFav = $conn->prepare("INSERT INTO favories (user_id,article_id) VALUES($idUser,$idArticle)");
+            $insertFav->execute();
+        }catch(PDOException $e){
+            //  die("articel already exist").$e->getMessage();
+             $insertFav = null;
+        }
+        
+
+    }
+
+    public function getFavoriteArticles($idUser){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+        $getArticle = $conn->query("SELECT articles.* FROM articles INNER JOIN favories 
+        ON articles.article_id = favories.article_id WHERE  favories.user_id = $idUser");
+        $result = $getArticle->fetchAll();
+        return $result;
+    }
+
 }

@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
         echo "error";
     }
 
-    $user = new VisitorContr();
-    $user->signUp($firstname,$lastname,$email,$password,$role,$passConfirm,$newFileName);
+    $user = new VisitorContr($firstname,$lastname,$email,$password,$passConfirm,$role,$newFileName);
+    $user->signUp();
     // header("Location: ../public/index.php");
 }

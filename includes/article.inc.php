@@ -4,6 +4,7 @@ include_once "../classes/Author-Contr.php";
 include_once "../classes/Article.php";
 include_once "../classes/Author.php";
 include_once "../classes/Comment.php";
+include_once "../classes/Favorie.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
 
@@ -104,9 +105,11 @@ if(isset($_POST["subcommment"])){
         $comment = new Comment();
         if($comment->createComment($visitorId,$articleId,$content)){
             echo json_encode(['status'=>'success']);
+            header("Location: ../public/detailArticle.php?ida=$articleId");
         }
         else {
             echo json_encode(['status'=>'error']);
+            header("Location: ../public/detailArticle.php?ida=$articleId");
         }
         exit();
     }
@@ -121,3 +124,17 @@ if(isset($_GET["fetchcomments"])){
     exit();
 }
 
+
+//add article to favories;
+
+if(isset($_GET["favId"])){
+    $articleId = $_GET["favId"];
+    $visitorId = $_SESSION["userId"];
+
+    $visitor = new Visitor();
+    $favorie = new Favorie($visitorId,$articleId);
+    $visitor->addToFavorie($favorie);
+
+    header("Location: ../public/index.php");
+
+}

@@ -11,6 +11,17 @@ class VisitorContr extends Visitor{
     private string $role;
     private string $image;
 
+
+    public function __construct($firstname,$lastname,$email,$password,$passConfirm,$role,$image){
+       $this->firstname = $firstname;
+       $this->lastname = $lastname;
+       $this->email = $email;
+       $this->password = $password;
+       $this->passConfirm = $passConfirm;
+       $this->role = $role;
+       $this->image = $image;
+    }
+
     //firstname getter and setter
     public function getFirstName(){
         return $this -> firstname;
@@ -66,17 +77,17 @@ class VisitorContr extends Visitor{
     }
 
     
-    public function signUp($firstname,$lastname,$email,$password,$role,$passConfirm,$image){
+    public function signUp(){
 
         $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
         $nameRegex = "/^[a-zA-Z][a-zA-Z0-9]$/";
         
-        if(empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($role) || empty($passConfirm)){
+        if(empty($this->firstname) || empty($this->lastname) || empty($this->email) || empty($this->password) || empty($this->passConfirm) || empty($this->role)){
             header("Location: ../public/signup.php?error=emptyInputs");
             exit();
         }
 
-        if(!preg_match($emailRegex,$email)){
+        if(!preg_match($emailRegex,$this->email)){
           header("Location: ../public/signup.php?error=invaliemail");
           exit();
         }
@@ -86,13 +97,13 @@ class VisitorContr extends Visitor{
         //   exit();
         // }
 
-        if($password != $passConfirm){
+        if($this->password != $this->passConfirm){
           header("Location: ../public/signup.php?error=passwordsnotmatch");
           exit();
         }
         
         $visitor = new Visitor();
-        $visitor->createUser($firstname,$lastname,$email,$role,$password,$image);
+        $visitor->createUser($this->firstname,$this->lastname,$this->email,$this->role,$this->password,$this->image);
     
     }
 

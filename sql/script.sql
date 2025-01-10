@@ -69,6 +69,31 @@ SELECT firstname,COUNT(*) AS num FROM users JOIN articles WHERE users.user_id = 
 GROUP BY firstname
 ORDER BY num DESC;
 
+--moyen des articles par categorie
+select avg(art_count) as article_moyen
+from(
+select categorie_id, count(article_id) as art_count  from articles
+group by categorie_id
+) as counts;
+
+-- les categories qui ont auncun article
+
+SELECT c.categorie_name
+FROM categories c
+LEFT JOIN articles a ON c.categorie_id = a.categorie_id
+GROUP BY c.categorie_name
+HAVING COUNT(a.article_id) = 0;
+
+-- Vue pour afficher les articles publier dans les derinier 30 jours
+drop view if exists afficher_dernier_articles;
+CREATE VIEW afficher_dernier_articles AS
+SELECT *
+FROM articles
+where pub_date >= date_sub(curdate() , interval 30 day);
+
+
+
+
 
 
 

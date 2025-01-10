@@ -26,9 +26,21 @@ if(isset($_POST['update-user'])){
 
     if(isset($newFileName)){
         $user->updateUser($userId,$firstname,$lastname,$email,$newFileName);
+        if($_SESSION['urole'] === "visitor"){
+            header("Location: ../public/personalDetails.php");
+        }
+        else if($_SESSION['urole'] === "author"){
+            header("Location: ../public/authorDash.php");
+        }
     }
     else {
         $user->updateUser($userId,$firstname,$lastname,$email,$userOldImg["user_image"]);
+        if($_SESSION['urole'] === "visitor"){
+            header("Location: ../public/personalDetails.php");
+        }
+        else if($_SESSION['urole'] === "author"){
+            header("Location: ../public/authorDash.php");
+        }
     }
     
 }

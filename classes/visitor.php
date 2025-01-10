@@ -39,11 +39,36 @@ class Visitor {
 
     }
 
-    public function displayArticles(){
+    public function getPages(){
         $db = DataBase::getInstance();
         $conn = $db->getConnection();
 
-        $sql = $conn->query("SELECT * FROM articles");
+        $rows_per_page = 3;
+
+        $records = $conn->query("SELECT * FROM articles");
+        $num_rows = $records->rowCount();
+
+        return $pages = ceil($num_rows / $rows_per_page);
+    }
+     
+
+    public function displayArticles($pages,$start){
+        $db = DataBase::getInstance();
+        $conn = $db->getConnection();
+
+        $rows_per_page = 3;
+
+        //number of pages
+
+        $records = $conn->query("SELECT * FROM articles");
+        $num_rows = $records->rowCount();
+
+        if(isset($_GET["page-nb"])){
+            $page = $_GET["page-nb"] - 1;
+            $start = $page * $rows_per_page;
+        }
+
+        $sql = $conn->query("SELECT * FROM articles LIMIT $start ,$rows_per_page");
         return $articles = $sql -> fetchAll();
     }
 

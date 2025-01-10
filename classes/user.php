@@ -120,8 +120,6 @@ class User {
         SET firstname = ?, lastname = ?, email = ?, user_image = ?
         WHERE user_id = ?");
         $updateUser->execute([$firstname,$lastname,$email,$image,$userId]);
-        
-        header("Location: ../public/index.php");
 
     }
 

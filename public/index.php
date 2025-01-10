@@ -3,6 +3,9 @@ session_start();
 include_once "../classes/visitor.php";
 include_once "../classes/Admin.php";
 
+if(!isset($_SESSION["urole"])){
+    header("Location:login.php");
+}
 if($_SESSION["urole"] === "author"){
     header("Location:authorDash.php");
 }
@@ -29,13 +32,13 @@ elseif($_SESSION["urole"] === "admin"){
   
   <div class="flex gap-4 items-center">
   <a href="../includes/logout.inc.php" class="hover:text-orange-400 text-sm"><i class="fa-solid fa-sign-out"></i> logout</a>
-  <a href="" class="hover:text-orange-400"><i class="fa-solid fa-user text-sm"></i></a>
+  <a href="personalDetails.php" class="hover:text-orange-400"><i class="fa-solid fa-user text-sm"></i></a>
   <button id="showFavories" class="hover:text-orange-400"><i class="fa-solid fa-heart"></i></button>
   </div>
 </header>
 
 <main class="w-full flex flex-col gap-5 max-w-[900px] mx-auto bg-white p-5 rounded-lg shadow-md mt-[80px]">
-    <div class="flex gap-3 items-center border-b pb-3">
+    <!-- <div class="flex gap-3 items-center border-b pb-3">
         <Label for="categorief">Filter by categorie</Label>
         <select name="categorief" id="" class="bg-gray-100 text-sm w-[200px] rounded-md shadow-sm p-0.5">
             <?php $adm = new Admin();
@@ -44,10 +47,11 @@ elseif($_SESSION["urole"] === "admin"){
             <option value="<?php echo $categorie["categorie_name"]; ?>"><?php echo $categorie["categorie_name"]; ?></option>
             <?php } ?>
         </select>
-    </div>
+    </div> -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <?php $visitor = new Visitor();
-        foreach($visitor->displayArticles() as $article){
+        $pages = $visitor->getPages();
+        foreach($visitor->displayArticles(0,$pages) as $article){
          ?>
         <div class="rounded-lg shadow-md flex flex-col gap-2 text-center">
             <img class="w-full h-[200px] rounded-t-lg" src="../uploads/<?php echo $article["image"];?>" alt="article image">
@@ -62,6 +66,14 @@ elseif($_SESSION["urole"] === "admin"){
             <!-- <a href="" class="mb-5 underline text-[1rem] hover:text-orange-400 capitalize">view details</a> -->
         </div>
         <?php } ?>
+    </div>
+
+    <div class="mx-auto my-2">
+        <?php 
+          for($c = 1 ; $c <= $pages; $c++){
+        ?>
+           <a href="?page-nb=<?php echo $c; ?>" class="border hover:bg-orange-400 px-3 text-lg"><?php echo $c; ?></a>
+        <?php  } ?>
     </div>
 </main>
 

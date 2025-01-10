@@ -29,7 +29,7 @@ if(!isset($_GET['ida']) || $_GET['ida'] == null || $_GET['ida'] === ''){
   <div class="flex gap-4 items-center">
   <a href="index.php" class="hover:text-orange-400 text-sm">home</a>
   <a href="../includes/logout.inc.php" class="hover:text-orange-400 text-sm"><i class="fa-solid fa-sign-out"></i> logout</a>
-  <a href="" class="hover:text-orange-400"><i class="fa-solid fa-user text-sm"></i></a>
+  <a href="personalDetails.php" class="hover:text-orange-400"><i class="fa-solid fa-user text-sm"></i></a>
   <button id="showFavories" class="hover:text-orange-400"><i class="fa-solid fa-heart"></i></button>
   </div>
 </header>

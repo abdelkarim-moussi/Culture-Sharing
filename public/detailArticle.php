@@ -39,7 +39,7 @@ if(!isset($_GET['ida']) || $_GET['ida'] == null || $_GET['ida'] === ''){
 foreach($author->articleDetails($_GET["ida"]) as $article){
 ?>
     <div class="border-t border-b my-3 py-2 relative">
-       <a href="../includes/article.inc.php" class="text-sm underline capitalize hover:text-orange-400 cursor-pointer">add to favories</a>
+       <a href="../includes/article.inc.php?favId=<?php echo $article['article_id'];?>"><i class="fa-regular fa-heart text-xl hover:text-orange-400"></i></a>
     </div>
     <div>
         <img class="rounded-t-lg shadow-md h-[400px] w-full object-cover" src="../uploads/<?php echo $article['image']?>" alt="article image">
@@ -80,9 +80,12 @@ foreach($author->articleDetails($_GET["ida"]) as $article){
             <div class="p-3">
             <h3 class="font-bold text-orange-400 text-md capitalize"><?php echo $article["title"];?></h3>
             <p class="mb-2 text-sm"><?php echo substr($article["content"],0,50);?></p>
-            <a href="detailArticle.php?ida=<?php echo $article["article_id"];?>" class="text-md bg-orange-400 text-white py-1 px-3 rounded-md shadow-sm hover:bg-orange-500">View Details</a>
+            <div class="flex gap-4 justify-center">
+              <a href="detailArticle.php?ida=<?php echo $article["article_id"];?>" class="text-sm bg-orange-400 text-white py-1 px-3 rounded-md shadow-sm hover:bg-orange-500">View Details</a>
+              <a href="../includes/article.inc.php?favId=<?php echo $article['article_id'];?>" class="bg-orange-400 px-1 rounded-lg hover:bg-orange-500"><i class="fa-regular fa-heart text-xl text-white "></i></a>
             </div>
-            <!-- <a href="" class="mb-5 underline text-[1rem] hover:text-orange-400 capitalize">view details</a> -->
+        </div>
+            
         </div>
         <?php } }?>
     </div>
